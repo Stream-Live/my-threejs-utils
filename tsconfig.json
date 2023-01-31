@@ -1,0 +1,28 @@
+{
+  "files": ["src/index.ts"],
+  "compilerOptions": {
+    "target": "es2015",   // 确保我们的库支持现代平台，并且不会携带不必要的垫片
+    "module": "es2015",   // 我们的模块将是一个标准的ES模块（默认是CommonJS）。ES模式在现代浏览器下没有任何问题；甚至Node从13版本开始就支持ES模式
+    "declaration": true,  // 因为我们想要自动生成d.ts声明文件。我们的TypeScript用户将需要这些声明文件
+    "outDir": "./dist",
+    "noEmit": false,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  }
+}
