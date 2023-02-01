@@ -1,15 +1,31 @@
 import * as THREE from 'three'
-// 添加地板
-export async function CreateFloor(params: {
-  width?: number,
+
+/**
+ * @description: 创建地板
+ * @param {number} width 400 宽，默认400
+ * @param {number} height 400 高，默认400
+ * @param {string} imgUrl "" 图片url
+ * @param {number} imgRepeatXY  图片重复次数
+ * @param {string} imgHighColor 图片高亮颜色('#7a6fc0' 这种格式)
+ * @param {number} initOpacity 初始透明度(范围0-1)
+ * @param {number} ringDistance 两个环间隔距离
+ * @param {number} blurRadius 外环的宽度(范围0-width)
+ * @param {number} innerRadius 内环的宽度(范围0-width)
+ * @param {number} lowerOpacity 内外环里有一个环透明度要低一点
+ * @param {number} moreLight 最高亮度 * 这个倍数
+ * @param {string} edgeColor 外围颜色('#1f527b' 这种格式)
+ * @return {*}
+ */
+export function CreateFloor(params: {
+  width?: number | 400,
   height?: number,
-  img?: THREE.Texture,
+  imgUrl: string,
   // 图片重复次数
   imgRepeatXY?: number,
   // 图片高亮颜色('#7a6fc0' 这种格式)
   imgHighColor?: string, 
   // 初始透明度(范围0-1)
-  initOpacity?: number, // 
+  initOpacity?: number,
   // 两个环间隔距离
   ringDistance?: number,
 
@@ -22,15 +38,17 @@ export async function CreateFloor(params: {
   moreLight?: number,
   // 外围颜色('#1f527b' 这种格式)
   edgeColor?: string
-}){
-  let loader = new THREE.TextureLoader();
-
-  let img = await loader.loadAsync('/images/1.png');
+}): {
+  start: () => void,
+  stop: () => void,
+  isStarted: Boolean,
+  mesh: THREE.Mesh,
+}{
 
   const option = {
     width: 400,
     height: 400,
-    img,
+    imgUrl: '',
     // 图片重复次数
     imgRepeatXY: 10,
     // 图片高亮颜色
@@ -48,10 +66,15 @@ export async function CreateFloor(params: {
     // 最高亮度 * 这个倍数
     moreLight: 1,
     // 外围颜色
-    edgeColor: '#1f527b'
+    edgeColor: '#1f527b',
   }
   Object.assign(option, params);
-  option.img.wrapS = option.img.wrapT = THREE.RepeatWrapping;
+  
+  let img: any = {value: null}
+  new THREE.TextureLoader().load(option.imgUrl, texture => {
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    img.value = texture;
+  })
 
   let geometry = new THREE.PlaneGeometry(option.width, option.height, 2, 2);
   geometry.computeBoundingSphere();
@@ -61,9 +84,7 @@ export async function CreateFloor(params: {
 
   let mat = new THREE.ShaderMaterial({
     uniforms: {
-      img: {
-        value: option.img,
-      },
+      img,
       imgRepeatXY: {
         value: option.imgRepeatXY,
       },
@@ -209,14 +230,26 @@ export async function CreateFloor(params: {
     transparent: true,
   });
 
+  let mesh = new THREE.Mesh(geometry, mat);
+  mesh.name = 'floor';
+  mesh.rotateX(-Math.PI * 0.5);
+
+  const obj = {
+    mesh,
+    isStarted: false,
+    start(){
+      this.isStarted = true;
+      render();
+    },
+    stop(){
+      this.isStarted = false;
+    },
+  }
   let clock = new THREE.Clock();
   function render() {
+    obj.isStarted && requestAnimationFrame(render);
     vTime.value += clock.getDelta() * 20;
-    requestAnimationFrame(render);
   }
-  render();
 
-  let mesh = new THREE.Mesh(geometry, mat)
-  mesh.rotateX(-Math.PI * 0.5);
-  return mesh;
+  return obj;
 }
