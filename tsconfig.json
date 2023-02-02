@@ -23,6 +23,11 @@
     "noPropertyAccessFromIndexSignature": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "allowJs": true,
+  },
+  "include": [
+    "*.ts",
+    "./src/fire-libs/*.js"
+  ],
 }

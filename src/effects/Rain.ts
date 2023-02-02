@@ -2,7 +2,7 @@
  * @Author: Wjh
  * @Date: 2023-02-01 11:20:05
  * @LastEditors: Wjh
- * @LastEditTime: 2023-02-01 17:28:00
+ * @LastEditTime: 2023-02-02 08:37:11
  * @FilePath: \my-threejs-utils\src\effects\Rain.ts
  * @Description: 
  * 
@@ -11,13 +11,13 @@ import * as THREE from 'three'
 
 /**
  * @description: 创建下雨
- * @param {number} width 宽，默认100 
- * @param {number} height 高，默认100 
- * @param {number} depth 深，默认100 
- * @param {number} maxSpeed 雨滴下落最大速度，默认0.9
- * @param {number} minSpeed 雨滴下落最小速度，默认0.1
- * @param {number} length 每个雨滴的长度，默认1
- * @param {number} opacity 雨滴的透明度，默认0.9
+ * @param {number} width 100 100 宽
+ * @param {number} height 100 高
+ * @param {number} depth 100 深
+ * @param {number} maxSpeed 0.9 雨滴下落最大速度
+ * @param {number} minSpeed 0.1 雨滴下落最小速度
+ * @param {number} length 1 每个雨滴的长度
+ * @param {number} opacity 0.9 雨滴的透明度
  * @return {*}
  */
 export function CreateRain( params?: {

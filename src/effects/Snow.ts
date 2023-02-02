@@ -3,12 +3,12 @@ import * as THREE from 'three'
 
 /**
  * @description: 创建下雪
- * @param {number} width 宽，默认100 
- * @param {number} height 高，默认100 
- * @param {number} depth 深，默认100 
- * @param {number} total 雪的数量
- * @param {number} speed 下雪速度
- * @param {number} pointSize 雪的大小
+ * @param {number} width 100 宽
+ * @param {number} height 100 高
+ * @param {number} depth 100 深
+ * @param {number} total 1000 雪的数量
+ * @param {number} speed 10 下雪速度
+ * @param {number} pointSize 10 雪的大小
  * @return {*}
  */
 export function CreateSnow(params?: {

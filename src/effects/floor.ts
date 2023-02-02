@@ -2,18 +2,18 @@ import * as THREE from 'three'
 
 /**
  * @description: 创建地板
- * @param {number} width 400 宽，默认400
- * @param {number} height 400 高，默认400
+ * @param {number} width 400 宽
+ * @param {number} height 400 高
  * @param {string} imgUrl "" 图片url
- * @param {number} imgRepeatXY  图片重复次数
- * @param {string} imgHighColor 图片高亮颜色('#7a6fc0' 这种格式)
- * @param {number} initOpacity 初始透明度(范围0-1)
- * @param {number} ringDistance 两个环间隔距离
- * @param {number} blurRadius 外环的宽度(范围0-width)
- * @param {number} innerRadius 内环的宽度(范围0-width)
- * @param {number} lowerOpacity 内外环里有一个环透明度要低一点
- * @param {number} moreLight 最高亮度 * 这个倍数
- * @param {string} edgeColor 外围颜色('#1f527b' 这种格式)
+ * @param {number} imgRepeatXY 10  图片重复次数
+ * @param {string} imgHighColor '#7a6fc0' 图片高亮颜色
+ * @param {number} initOpacity 0.2 初始透明度(范围0-1)
+ * @param {number} ringDistance 90 两个环间隔距离
+ * @param {number} blurRadius 25 外环的宽度(范围0-width)
+ * @param {number} innerRadius 20 内环的宽度(范围0-width)
+ * @param {number} lowerOpacity 0.4 内外环里有一个环透明度要低一点
+ * @param {number} moreLight 1 最高亮度 * 这个倍数
+ * @param {string} edgeColor '#1f527b' 外围颜色('#1f527b' 这种格式)
  * @return {*}
  */
 export function CreateFloor(params: {
