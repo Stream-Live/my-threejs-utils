@@ -15,7 +15,7 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedParameters": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
@@ -26,6 +26,7 @@
     "skipLibCheck": true,
     "allowJs": true,
   },
+
   "include": [
     "*.ts",
     "./src/fire-libs/*.js"
