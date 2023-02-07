@@ -8,11 +8,11 @@ import {debounce} from 'lodash-es'
  * @param {Array<string>} meshNameList [] 要穿墙的物体的名称
  * @param {THREE.Scene} scene null 场景对象
  * @param {number} height 10 电子围栏高度
- * @param {Function} warnCallback (mesh: THREE.Object3D) => void 物体撞墙时的回调函数，最好加个
+ * @param {Function} warnCallback (mesh: THREE.Object3D) => void 物体撞墙时的回调函数，只会回调一次
  * @param {string} bgColor '#00ff00' 电子围栏背景色
- * @param {string} lineColor '#ffff00' 分段数，默认200
- * @param {string} warnBgColor '#ff0000' 分段数，默认200
- * @param {string} warnLineColor '#ffff00' 分段数，默认200
+ * @param {string} lineColor '#ffff00' 条纹颜色
+ * @param {string} warnBgColor '#ff0000' 告警时的背景色
+ * @param {string} warnLineColor '#ffff00' 告警时的条纹颜色
  * @param {number} cycle 1 电子围栏条纹周期
  * @param {number} lineWidth 0 条纹宽度
  * @param {number} speed 1 条纹运动速度
@@ -31,7 +31,12 @@ export function CreateFence(params: {
   cycle?: number,
   lineWidth?: number,
   speed?: number,
-}) {
+}): {
+  start: () => void,
+  stop: () => void,
+  isStarted: Boolean,
+  mesh: THREE.Object3D,
+} {
 
   const option = {
     points: [],

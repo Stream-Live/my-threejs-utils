@@ -2,7 +2,7 @@
  * @Author: Wjh
  * @Date: 2023-02-01 16:21:34
  * @LastEditors: Wjh
- * @LastEditTime: 2023-02-06 16:58:41
+ * @LastEditTime: 2023-02-07 13:33:11
  * @FilePath: \my-threejs-utils\src\utils.ts
  * @Description: 
  * 
@@ -230,4 +230,61 @@ export function computeLabelPosition(polygonPoints: Array<Array<{ x: number; z: 
 
     return _arr.every((item) => item >= 0) || _arr.every(item => item <= 0);
   }
+}
+
+/**
+ * @description: 获取颜色的线性插值
+ * @param {string} start  开始颜色
+ * @param {string} end  结束颜色
+ * @param {number} steps  颜色分解 次数
+ * @param {number} gamma  暂时理解为透明一点（伽马）
+ * @return {*}
+ */
+export function getGradientColors(start: string, end: string, steps: number, gamma?: number): Array<string>{
+  let parseColor = function (hexStr: any) {
+    return hexStr.length === 4
+      ? hexStr
+          .substr(1)
+          .split("")
+          .map(function (s: any) {
+            return 0x11 * parseInt(s, 16);
+          })
+      : [hexStr.substr(1, 2), hexStr.substr(3, 2), hexStr.substr(5, 2)].map(
+          function (s) {
+            return parseInt(s, 16);
+          }
+        );
+  };
+
+  // zero-pad 1 digit to 2
+  let pad = function (s: any) {
+    return s.length === 1 ? "0" + s : s;
+  };
+
+    let i,
+      j,
+      ms,
+      me,
+      output = [],
+      so = [];
+    gamma = gamma || 1;
+    var normalize = function (channel: any) {
+      return Math.pow(channel / 255, (gamma as any));
+    };
+    start = parseColor(start).map(normalize);
+    end = parseColor(end).map(normalize);
+    for (i = 0; i < steps; i++) {
+      ms = i / (steps - 1);
+      me = 1 - ms;
+      for (j = 0; j < 3; j++) {
+        so[j] = pad(
+          Math.round(
+            Math.pow((start[j] as any) * me + (end[j] as any) * ms, 1 / gamma) * 255
+          ).toString(16)
+        );
+      }
+      output.push("#" + so.join(""));
+    }
+    return output;
+  
 }
