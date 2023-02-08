@@ -2,7 +2,7 @@
  * @Author: Wjh
  * @Date: 2023-02-01 16:28:29
  * @LastEditors: Wjh
- * @LastEditTime: 2023-02-01 17:40:14
+ * @LastEditTime: 2023-02-08 13:48:27
  * @FilePath: \my-threejs-utils\src\effects\AnimationPath.ts
  * @Description: 
  * 
@@ -50,9 +50,11 @@ export function CreateAnimationPath(params: {
   let curvePath = getCurvePathByPoints(option.points, option.radius, option.isClosed)
 
   const line = new THREE.Line(
-    new THREE.BufferGeometry().setFromPoints(curvePath.getPoints(50)),
+    new THREE.BufferGeometry(),
     new THREE.LineBasicMaterial({ color: 0xffff00 })
   );
+  line.name = 'animation_line';
+  let positionArray: Array<number> = [];
 
   const obj = {
     line,
@@ -67,6 +69,7 @@ export function CreateAnimationPath(params: {
   }
   let clock = new THREE.Clock();
   let percent = 0;
+  let isDrawLine = true;
   function render() {
     obj.isStarted && option.mesh && requestAnimationFrame(render);
 
@@ -87,6 +90,15 @@ export function CreateAnimationPath(params: {
     let targetPosition = curvePath.getPointAt(prePercent);
     (option.mesh! as THREE.Mesh).lookAt(targetPosition.x, targetPosition.y, targetPosition.z);
 
+    // 只允许写一圈线的点坐标
+    if(isDrawLine){
+      positionArray.push(pos.x);
+      positionArray.push(pos.y);
+      positionArray.push(pos.z);
+      line.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positionArray), 3));
+    }
+    
+    if(percent == 1) isDrawLine = false;
   }
 
   return obj
