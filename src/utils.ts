@@ -2,7 +2,7 @@
  * @Author: Wjh
  * @Date: 2023-02-01 16:21:34
  * @LastEditors: Wjh
- * @LastEditTime: 2023-02-07 13:33:11
+ * @LastEditTime: 2023-02-09 08:37:42
  * @FilePath: \my-threejs-utils\src\utils.ts
  * @Description: 
  * 
@@ -287,4 +287,30 @@ export function getGradientColors(start: string, end: string, steps: number, gam
     }
     return output;
   
+}
+
+/**
+ * @description: 根据屏幕坐标获取三维坐标
+ * @param {number} x  屏幕坐标 x
+ * @param {number} y  屏幕坐标 y
+ * @param {*} targetZ z轴 默认为0
+ * @return {*}
+ */
+export function getThreePointByScreenPoint(renderer: THREE.WebGLRenderer, camera: THREE.Camera, x: number, y: number, targetZ=0) {
+  var vec = new THREE.Vector3(); // create once and reuse
+  var pos = new THREE.Vector3(); // create once and reuse
+
+  vec.set(
+      ( x / renderer.domElement.clientWidth ) * 2 - 1,
+      - ( y / renderer.domElement.clientHeight ) * 2 + 1,
+      0.5 );
+
+  vec.unproject( camera );
+
+  vec.sub( camera.position ).normalize();
+
+  var distance = (targetZ - camera.position.z) / vec.z;
+
+  pos.copy( camera.position ).add( vec.multiplyScalar( distance ) );
+  return pos;
 }
