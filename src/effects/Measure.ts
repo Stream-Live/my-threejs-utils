@@ -3,11 +3,17 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { DragControls } from "three/examples/jsm/controls/DragControls";
 import { getThreePointByScreenPoint } from '../utils'
 
+/**
+ * @description: 返回测量距离的相关函数
+ * @param {k}  1 / 40   物体和精灵的大小 和 相机距离的比例
+ * @return {*}
+ */
 export function MeasureDistance(params: {
   renderer: THREE.WebGLRenderer, 
   scene: THREE.Scene,
   camera: THREE.Camera, 
   controls: OrbitControls,
+  k?: number
 }){
   let meshList: Array<THREE.Mesh> = [];
   let spriteList: Array<THREE.Sprite> = [];
@@ -17,6 +23,7 @@ export function MeasureDistance(params: {
   let curvePath = new THREE.CurvePath();
   let line: THREE.Line | null;
   let group = new THREE.Group();
+  const k = params.k || (1 / 40);  // 物体大小和离摄像机距离的比例
 
   const getCanvasByDistance = (text: string) => {
     const fontSize = 30;
@@ -55,13 +62,15 @@ export function MeasureDistance(params: {
     const text = `${p1.distanceTo(p2).toFixed(2)}米`;
     
     // 绘制canvas
-    let {canvas, scaleY} = getCanvasByDistance(text);
+    let {canvas} = getCanvasByDistance(text);
     
     // 绘制精灵
     sprite.material.map = new THREE.CanvasTexture(canvas);
     sprite.position.copy(centerP);
-    sprite.scale.y = scaleY;
 
+    let s = sprite.position.distanceTo(params.camera.position) * k;
+    sprite.scale.set(s, s * 0.5, s);
+    
   }
 
   const updateLengthSprite = () => {
@@ -73,12 +82,16 @@ export function MeasureDistance(params: {
       total += (+p1.distanceTo(p2).toFixed(2));
     }
     // 绘制canvas
-    let {canvas, scaleY} = getCanvasByDistance(`${total.toFixed(2)}米`);
+    let {canvas} = getCanvasByDistance(`${total.toFixed(2)}米`);
     // 绘制精灵
     lengthSprite!.material.map = new THREE.CanvasTexture(canvas);
     let pos = meshList[meshList.length-1]!.position;
+    
     lengthSprite!.position.set(pos.x, pos.y+0.7, pos.z);
-    lengthSprite!.scale.y = scaleY;
+
+    let s = lengthSprite!.position.distanceTo(params.camera.position) * k;
+    lengthSprite!.scale.set(s, s * 0.5, s);
+    
   }
 
   const addPointByPosition = (position: THREE.Vector3) => {
@@ -155,18 +168,36 @@ export function MeasureDistance(params: {
   const rightclick = (e: any) => {
     if (e.button == 2) {
 
-      const x = e.clientX;
-      const y = e.clientY;
+      const x = e.offsetX;
+      const y = e.offsetY;
       addPointByPosition(getThreePointByScreenPoint(params.renderer, params.camera, x, y));
 
     }
   };
+
+  const change = () => {
+    for(let i=0; i< meshList.length; i++){
+      let box = meshList[i];
+      let s = box!.position.distanceTo(params.camera.position) * k;
+      box?.scale.set(s,s,s);
+    }
+    
+    for(let i=0; i< spriteList.length; i++){
+      let box = spriteList[i];
+      let s = box!.position.distanceTo(params.camera.position) * k;
+      box?.scale.set(s, s * 0.5, s);
+    }
+    if(!lengthSprite) return;
+    let s = lengthSprite!.position.distanceTo(params.camera.position) * k;
+    lengthSprite?.scale.set(s, s * 0.5, s);
+  }
 
   const start = () => {
     meshList = [];
     spriteList = [];
 
     window.addEventListener("mousedown", rightclick);
+    params.controls.addEventListener("change", change);
 
     dragControls = new DragControls(
       meshList,
@@ -194,6 +225,7 @@ export function MeasureDistance(params: {
     spriteList = [];
 
     window.removeEventListener("mousedown", rightclick);
+    params.controls.removeEventListener("change", change);
 
     dragControls.removeEventListener("dragstart", dragstart);
     dragControls.removeEventListener("dragend", dragend);
@@ -214,8 +246,8 @@ export function MeasureDistance(params: {
     for(let item of points){
       addPointByPosition(new THREE.Vector3(item.x, item.y, item.z));
     }
-    
   }
+
   let obj = {
     start,
     end,
