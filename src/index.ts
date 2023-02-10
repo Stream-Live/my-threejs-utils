@@ -2,7 +2,7 @@
  * @Author: Wjh
  * @Date: 2023-01-30 17:17:53
  * @LastEditors: Wjh
- * @LastEditTime: 2023-02-09 08:44:11
+ * @LastEditTime: 2023-02-10 10:12:00
  * @FilePath: \my-threejs-utils\src\index.ts
  * @Description: 
  * 
@@ -25,3 +25,4 @@ export { FenceGeometry } from './effects/FenceGeometry'
 export { CreateFence } from './effects/Fence'    
 export { CreateFlywire } from './effects/Flywire'    
 export { CreateWaterSpout } from './effects/WaterSpout'    
+export { MeasureDistance } from './effects/Measure'
