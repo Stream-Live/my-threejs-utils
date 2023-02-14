@@ -2,7 +2,7 @@
  * @Author: Wjh
  * @Date: 2023-01-31 16:28:46
  * @LastEditors: Wjh
- * @LastEditTime: 2023-02-01 17:40:39
+ * @LastEditTime: 2023-02-14 09:23:15
  * @FilePath: \my-threejs-utils\src\effects\Path.ts
  * @Description: 
  * 
@@ -32,6 +32,7 @@ export function CreatePath(params: {
   isClosed?: Boolean,
   radius?: number, // 范围0-1，实际意义是圆角的贝塞尔曲线控制点，贝塞尔曲线的起始终止点都是 1
   divisions?: number, // 默认分段数
+  speed?: number  // 速度
 }): {
   start: () => void,
   stop: () => void,
@@ -44,6 +45,7 @@ export function CreatePath(params: {
     isClosed: false,
     radius: 0.5, // 范围0-1，实际意义是圆角的贝塞尔曲线控制点，贝塞尔曲线的起始终止点都是 1
     divisions: 200, // 默认分段数
+    speed: 1,
   };
   Object.assign(option, params);
 
@@ -106,7 +108,7 @@ export function CreatePath(params: {
   function render() {
     obj.isStarted && requestAnimationFrame(render);
 
-    transformY.value -= clock.getDelta();
+    transformY.value += (-option.speed * clock.getDelta());
   }
 
   return obj
