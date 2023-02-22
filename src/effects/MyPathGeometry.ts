@@ -2,7 +2,7 @@
  * @Author: Wjh
  * @Date: 2022-12-25 23:27:55
  * @LastEditors: Wjh
- * @LastEditTime: 2023-02-01 09:13:44
+ * @LastEditTime: 2023-02-22 08:42:30
  * @FilePath: \my-threejs-utils\src\effects\MyPathGeometry.ts
  * @Description:
  *
@@ -16,13 +16,10 @@ import {
 } from 'three'
 
 class MyPathGeometry extends BufferGeometry {
-  constructor(curve: CurvePath<Vector3>, divisions: number) {
+  constructor(curve: CurvePath<Vector3>, divisions: number, halfWidth = 0.2, repeatY = 30) {
     super();
 
     const vertices: Array<number> = [];
-
-    const halfWidth = 0.2;
-    const repeatY = 30;
 
     const up = new Vector3(0, 1, 0);
     const forward = new Vector3();
