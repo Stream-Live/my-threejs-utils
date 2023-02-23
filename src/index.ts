@@ -2,7 +2,7 @@
  * @Author: Wjh
  * @Date: 2023-01-30 17:17:53
  * @LastEditors: Wjh
- * @LastEditTime: 2023-02-10 10:12:00
+ * @LastEditTime: 2023-02-23 16:30:09
  * @FilePath: \my-threejs-utils\src\index.ts
  * @Description: 
  * 
@@ -14,10 +14,11 @@ export { CreateRain } from './effects/Rain'
 export { CreateSnow } from './effects/Snow'   
 export { CreateAnimationPath } from './effects/AnimationPath'   
 export { 
+  importJson,
   getCurvePathByPoints, 
   computeLabelPosition, 
   getGradientColors, 
-  getThreePointByScreenPoint 
+  getThreePointByScreenPoint, 
 } from './utils'    
 export { CreateFire } from './effects/Fire'    
 export { ToggleVirtualByEdgesGeometry, ToggleVirtualByWireframe } from './effects/Virtual'    

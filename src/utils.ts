@@ -2,13 +2,103 @@
  * @Author: Wjh
  * @Date: 2023-02-01 16:21:34
  * @LastEditors: Wjh
- * @LastEditTime: 2023-02-09 08:37:42
+ * @LastEditTime: 2023-02-23 16:29:50
  * @FilePath: \my-threejs-utils\src\utils.ts
  * @Description: 
  * 
  */
 
 import * as THREE from 'three'
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader"; //rebe加载器
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+/**
+ * @description: 导入json文件
+ * @param {any} _json
+ * @param {THREE} _scene
+ * @param {OrbitControls} _controls
+ * @return {*}
+ */
+export async function importJson(_json: any, _scene: THREE.Scene, _controls: OrbitControls) {
+
+  
+  Object.assign(_controls, _json.controls);
+
+  let loader = new THREE.ObjectLoader();
+  let params = _json.params;
+  let lightObj: any = {};
+  const rgbeLoader = new RGBELoader();
+  const textureLoader = new THREE.TextureLoader();
+
+  let map: any = {
+    AmbientLight: (obj: any) => {
+      if (params.hasAmbientLight) {
+        _scene.add(obj);
+      } 
+    },
+    DirectionalLight: (obj: any) => {
+
+      if (params.hasDirectionalLight) {
+        _scene.add(obj);
+      } 
+    },
+    DirectionalLightTarget: (obj: any) => {
+      if (params.hasDirectionalLightTarget) {
+        _scene.add(obj);
+        lightObj['DirectionalLight'].target = obj;
+      }
+    },
+    PointLight: (obj: any) => {
+      if (params.hasPointLight) {
+        _scene.add(obj);
+      }
+    },
+    HemisphereLight: (obj: any) => {
+      if (params.hasHemisphereLight) {
+        _scene.add(obj);
+      }
+    },
+    SpotLight: (obj: any) => {
+      if (params.hasSpotLight) {
+        _scene.add(obj);
+      }
+    },
+    RectAreaLight: (obj: any) => {
+      if (params.hasRectAreaLight) {
+        obj.lookAt(
+          params.rectAreaLightTargetX,
+          params.rectAreaLightTargetY,
+          params.rectAreaLightTargetZ
+        );
+        _scene.add(obj);
+      } 
+    },
+  };
+
+  for (let key in _json.data) {
+    let objJson = _json.data[key];
+
+    let obj = await loader.parseAsync(objJson);
+    lightObj[key] = obj;
+  }
+  for (let key in lightObj) {
+    map[key] && map[key](lightObj[key]);
+  }
+
+  if (params.isAddHdr && params.curHdr) {
+    let texture = await rgbeLoader.loadAsync(params.curHdr);
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    _scene.environment = texture;
+  }
+
+  if (params.curBg) {
+    let texture = await textureLoader.loadAsync(params.curBg);
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    _scene.background = texture;
+
+  }
+
+}
 
 /**
  * @description: 根据点数组获取道路的 THREE.CurvePath
