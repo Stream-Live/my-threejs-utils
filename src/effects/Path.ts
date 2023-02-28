@@ -2,7 +2,7 @@
  * @Author: Wjh
  * @Date: 2023-01-31 16:28:46
  * @LastEditors: Wjh
- * @LastEditTime: 2023-02-14 09:23:15
+ * @LastEditTime: 2023-02-27 13:53:55
  * @FilePath: \my-threejs-utils\src\effects\Path.ts
  * @Description: 
  * 
@@ -24,6 +24,9 @@ import { getCurvePathByPoints } from '../utils'
  * @param {Boolean} isClosed false 是否闭合曲线
  * @param {number} radius 0.5 圆角，范围 0-1
  * @param {number} divisions 200 分段数，默认200
+ * @param {number} speed 1 速度
+ * @param {number} width 0.4 宽度
+ * @param {number} repeatY 20 重复次数
  * @return {*}
  */
 export function CreatePath(params: {
@@ -33,6 +36,8 @@ export function CreatePath(params: {
   radius?: number, // 范围0-1，实际意义是圆角的贝塞尔曲线控制点，贝塞尔曲线的起始终止点都是 1
   divisions?: number, // 默认分段数
   speed?: number  // 速度
+  width?: number,
+  repeatY?: number
 }): {
   start: () => void,
   stop: () => void,
@@ -46,12 +51,14 @@ export function CreatePath(params: {
     radius: 0.5, // 范围0-1，实际意义是圆角的贝塞尔曲线控制点，贝塞尔曲线的起始终止点都是 1
     divisions: 200, // 默认分段数
     speed: 1,
+    width: 0.4,
+    repeatY: 20
   };
   Object.assign(option, params);
 
   let curvePath = getCurvePathByPoints(option.points, option.radius, option.isClosed);
   
-  let pathGeometry = new MyPathGeometry(curvePath, option.divisions);
+  let pathGeometry = new MyPathGeometry(curvePath, option.divisions, option.width / 2, option.repeatY);
 
   let bg: {value: any} = {value: null};
     new TextureLoader().load(option.imgUrl, (texture => {
