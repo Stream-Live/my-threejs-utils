@@ -113,6 +113,7 @@ export function CreateFence(params: {
     transparent: true
   })
   let mesh = new THREE.Mesh(geometry, mat);
+  mesh.name = 'fence';
 
   // 2、添加碰撞检测
   let meshAndBoxList: Array<{mesh: THREE.Object3D, box: THREE.Box3}> = [];

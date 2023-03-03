@@ -2,7 +2,7 @@
  * @Author: Wjh
  * @Date: 2023-02-01 16:28:29
  * @LastEditors: Wjh
- * @LastEditTime: 2023-02-08 13:48:27
+ * @LastEditTime: 2023-03-03 10:21:32
  * @FilePath: \my-threejs-utils\src\effects\AnimationPath.ts
  * @Description: 
  * 
@@ -13,19 +13,19 @@ import { getCurvePathByPoints } from '../utils'
 /**
  * @description: 创建运动路径
  * @param {Array<{x: number, y: number, z: number}>} points [] 点数组
+ * @param {number} mesh  null 要运动的 Mesh 或 Group
  * @param {Boolean} isClosed false   是否闭合曲线
  * @param {number} radius 0.5  圆角，范围 0-1
- * @param {number} mesh  null 要运动的 Mesh 或 Group
- * @param {number} divisions  0.1 运动速度
- * @param {number} speed  200 分段数
+ * @param {number} divisions  200 分段数
+ * @param {number} speed   0.1 运动速度
  * @param {boolean} isRepeat  false 是否重复
  * @return {*}
  */
 export function CreateAnimationPath(params: {
   points: Array<{x: number, y: number, z: number}>,
+  mesh: THREE.Mesh | THREE.Group,
   isClosed?: boolean, // 是否闭合曲线
   radius?: number,     // 圆角，范围是0-1，实际意义是利用占比radius的线条来画圆角
-  mesh?: THREE.Mesh | THREE.Group,
   divisions?: number, // 分段数
   speed?: number, // 运动速度
   isRepeat?: boolean, // 是否重复运动
