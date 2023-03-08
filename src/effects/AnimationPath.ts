@@ -2,7 +2,7 @@
  * @Author: Wjh
  * @Date: 2023-02-01 16:28:29
  * @LastEditors: Wjh
- * @LastEditTime: 2023-03-03 10:21:32
+ * @LastEditTime: 2023-03-08 14:00:32
  * @FilePath: \my-threejs-utils\src\effects\AnimationPath.ts
  * @Description: 
  * 
@@ -56,18 +56,20 @@ export function CreateAnimationPath(params: {
   line.name = 'animation_line';
   let positionArray: Array<number> = [];
 
+  let clock = new THREE.Clock();
   const obj = {
     line,
     isStarted: false,
     start(){
       this.isStarted = true;
+      clock.start();
       render();
     },
     stop(){
       this.isStarted = false;
+      clock.stop();
     },
   }
-  let clock = new THREE.Clock();
   let percent = 0;
   let isDrawLine = true;
   function render() {
